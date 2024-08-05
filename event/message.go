@@ -15,7 +15,8 @@ func (e *event) handleMessage(update tgbotapi.Update) {
 	}
 }
 
-func (e *event) sendWelcomeMessage(update tgbotapi.Update) {
+func (e *event) sendWelcomeMessage(update tgbotapi.Update, user string) {
+	fmt.Println("user", user)
 	dir, err := os.Getwd()
 	if err != nil {
 		panic(err)
@@ -24,8 +25,8 @@ func (e *event) sendWelcomeMessage(update tgbotapi.Update) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(file))
-	msg := tgbotapi.NewMessage(update.Message.Chat.ID, string(file))
+
+	msg := tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("%s, %s", string(file), user))
 	if _, err := e.bot.Send(msg); err != nil {
 		panic(err)
 	}

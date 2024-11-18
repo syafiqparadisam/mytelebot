@@ -9,6 +9,7 @@ import (
 	"github.com/supabase-community/supabase-go"
 	"github.com/syafiqparadisam/mytelebot/event"
 	"github.com/syafiqparadisam/mytelebot/repositories"
+	// "github.com/supabase-community/supabase-go"
 )
 
 func main() {
@@ -31,10 +32,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	bot.Debug = true
 	updateConfig := tgbotapi.NewUpdate(0)
 	updateConfig.Timeout = 30
 	updates := bot.GetUpdatesChan(updateConfig)
+
 	event := event.NewEvent(bot, repo)
 	event.HandleEvent(updates)
 }

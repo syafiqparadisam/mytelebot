@@ -1,1 +1,5 @@
-Welcome to syafiq code 
+
+Hello myname is syafiqcode
+Iam a programmer, linuxer, devops from indonesia
+My purpose is make indonesia more adapt in technology
+Iam passionate about modern technology

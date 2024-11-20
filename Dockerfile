@@ -31,6 +31,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 # Copy build binary 
 
 COPY --from=build /app/main.out /app/main.out
+COPY --from=build /app/mock /app/mock
 
 # Change ownership of the working directory
 RUN chown -R appuser:appgroup /app

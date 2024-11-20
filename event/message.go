@@ -96,12 +96,12 @@ func (e *event) handleMessage() {
 			isValid := e.ensureIsNotCommandAndFullNumber()
 
 			if isValid {
-				update := &entity.UpdateTech{Tech: e.chat, Description: mesg[2].Message}
+				update := &entity.UpdateTech{Tech: e.chat, Id: 1}
 				if err := e.repo.UpdateTechUsed(update); err != nil {
 					panic(err)
 				}
 
-				apps, err := e.repo.GetApp(mesg[2].Message, e.chat)
+				apps, err := e.repo.GetApp(1)
 				if err != nil {
 					panic(err)
 				}

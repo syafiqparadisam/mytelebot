@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Compile aplikasi Go
-RUN go build -o server.out server.go
+RUN go build -o main.out main.go
 
 # Final stage
 FROM alpine:3.20.2
@@ -30,7 +30,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Copy build binary 
 
-COPY --from=build /app/server.out /app/server.out
+COPY --from=build /app/main.out /app/main.out
 
 # Change ownership of the working directory
 RUN chown -R appuser:appgroup /app
@@ -38,4 +38,4 @@ RUN chown -R appuser:appgroup /app
 # Switch to non-root user
 USER appuser
 
-CMD [ "./server.out" ]
+CMD [ "./main.out" ]

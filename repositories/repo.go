@@ -15,6 +15,9 @@ type RepoInterface interface {
 	InsertOrder(entity *entity.Order) error
 	UpdatePhone(chatid int64, phone string) error
 	FindUserByChatId(chatid int64) (*[]entity.User, error)
+	InsertApp(entity *entity.AppPayload) error
+	UpdateTechUsed(entity *entity.UpdateTech) error
+	GetApp(id int) (*[]entity.App, error)
 }
 
 type Repository struct {

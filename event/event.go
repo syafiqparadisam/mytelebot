@@ -9,22 +9,28 @@ import (
 )
 
 type event struct {
-	bot  *tgbotapi.BotAPI
-	repo repositories.RepoInterface
+	bot    *tgbotapi.BotAPI
+	repo   repositories.RepoInterface
+	chatId int64
+	chat   string
+	user   string
 }
 
 func NewEvent(bot *tgbotapi.BotAPI, repo repositories.RepoInterface) *event {
 	return &event{
-		bot:  bot,
-		repo: repo,
+		bot:    bot,
+		repo:   repo,
+		chatId: 1,
 	}
 }
 
 func (e *event) HandleEvent(updates tgbotapi.UpdatesChannel) {
 	for update := range updates {
+		chats := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
+		e.chatId = chats.ChatID
+		e.chat = chats.Text
 
 		// check user
-		var user string
 		userFromDb, err := e.repo.FindUser(update.Message.From.UserName)
 		if err != nil {
 			panic(err)
@@ -36,7 +42,7 @@ func (e *event) HandleEvent(updates tgbotapi.UpdatesChannel) {
 				Username:  update.Message.From.UserName,
 				Lastname:  update.Message.From.LastName,
 				Firstname: update.Message.From.FirstName,
-				ChatId:    update.Message.Chat.ID,
+				ChatId:    e.chatId,
 			}
 
 			err := e.repo.CreateUser(userEntity)
@@ -44,25 +50,16 @@ func (e *event) HandleEvent(updates tgbotapi.UpdatesChannel) {
 				panic(err)
 			}
 
-			user = userEntity.Username
+			e.user = userEntity.Username
 		} else {
-			user = users[0].Username
+			e.user = users[0].Username
 		}
 
-		e.handleMessage(update, user)
+		e.handleMessage()
 
-		log.Printf("Got message %s from %s\n", update.Message.Text, update.Message.From)
+		log.Printf("Got message %s from %s\n", e.chat, update.Message.From)
 	}
 }
-
-
-func (e *event) Send(chatId int64, message string) {
-	msg := tgbotapi.NewMessage(chatId, message)
-	if _, err := e.bot.Send(msg); err != nil {
-		panic(err)
-	}
-}
-
 
 // // Membuat keyboard dinamis
 // func (e *event) updateKeyboard() tgbotapi.InlineKeyboardMarkup {

@@ -5,4 +5,5 @@ type User struct {
 	Firstname string `json:"firstname"`
 	Lastname string `json:"lastname"`
 	ChatId int64 `json:"chat_id"`
+	PhoneNumber *string `json:"phonenumber"`
 }
